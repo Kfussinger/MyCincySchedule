@@ -1,35 +1,41 @@
-<! DOC html>
-<html lang= "en" dir="ltr'>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
 <head>
-<meta charset="UF-8'>
-<meta name= "viewport"
-      content="width=device-width,
-                     inital-scale=1.0".
-add css link
-<title> Cincy Schedule</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Cincy Schedule</title>
 </head>
-
 <body>
-<!--- use libraries* definately use Dom manipulation for 
-inside body selecting/clicking/adding events
--build calendar with table
-div classes with wrap, container for calendar, 
-th/tr
+    <h1>My Cincy Schedule</h1>
+    <div class="calendar">
+        <div class="header">
+            <!-- Navigation buttons with accessible labels suggested improvement -->
+            <button id="preBtn" aria-label="Previous">
+                <i class="fa-solid fa-chevron-left"></i> Previous
+            </button>
+            <div class="monthYear" id="monthYear"></div>
+            <button id="nextBtn" aria-label="Next">
+                <i class="fa-solid fa-chevron-right"></i> Next
+            </button>
+        </div>
 
-EVENT HANDLING TO implement functions for date, event date, event description
-button to add event*
-button to delete event*
-list
-button with add events/event listener/hault page change
-select drop downs for different month/years
 
-ul list with weekdays
---->
+                  <div class="days">
+                         <div class="day">Mon</div>
+                        <div class="day">Tue</div>
+                        <div class="day">Wed</div>
+                        <div class="day">Thu</div>
+                        <div class="day">Fri</div>
+                        <div class="day">Sat</div>
+                        <div class="day">Sun</div>
+        </div>
 
+        <!-- Dates will be dynamically inserted here -->
+        <div class="dates" id="dates"></div>
+    </div>
+
+
+    <script src="main.js"></script>
 </body>
-
-
-
 </html>
-
-css code with pinterest color palette
