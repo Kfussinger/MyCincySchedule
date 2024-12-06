@@ -1,60 +1,133 @@
-const monthYearElement = document.getElementById('monthYear');
-const datesElement = document.getElementById( 'dates');
-const prevBtn = document.getElementById ('prevBtn');
-const nextBtn = document.getElementById ( 'nextBtn');
+let nav = 0;
+let clicked = null;
+let events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : [];
 
-let currentDate = new Date();
+const calendar = document.getElementById('calendar');
+const newEventModal = document.getElementById('newEventModal');
+const deleteEventModal = document.getElementById('deleteEventModal');
+const backDrop = document.getElementById('modalBackDrop');
+const eventTitleInput = document.getElementById('eventTitleInput');
+const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-const updateCalendar = () => {
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth();
+function openModal(date) {
+  clicked = date;
+  
+  const eventForDay = events.find(e => e.date === clicked);
 
-    const firstDay = new Date(currentYear, currentMonth,0);
-    const lastDay = new Date( currentYear, currentMonth =1,0);
-    const totalDays = lastDay.getDate();
-    const firstDayIndex = firstDay.getDay();
-    const lastDayIndex = lastDay.getDay();
+  if (eventForDay) {
+    document.getElementById('eventText').innerText = eventForDay.title;
+    deleteEventModal.style.display = 'block';
+  } else {
+    newEventModal.style.display = 'block';
+  }
 
-    const monthYearString = currentDate.toLocalString
-    ('default', {month: 'long', year: 'numeric'});
-
-
-    monthYearElement.textContent = monthYearString;
-
-    let datesHTML ='';
-
-    for(let i = firstDayIndex; i > 0; i--) {
-        const prevDate = New Date(currentYear, currentMonth 0 - i + 1);
-        datesHTML += '<div class = "date inactive>${prevDate.getDate()}</div>';
-    }
-
-    for(let i = 1; i==totalDays; i++); {
-        const date = new Date (currentYear,currentMonth,i );
-        const activeClass = date.toDateString()=== new Date().toDateString()
-        ? 'active': '';
-        dateHTML +='<div class = "date ${activeClass"}>${i}</div>';
-
-    for(let i = 1; i<=7 = lastDayIndex; i++) {
-        const nextDate = new Date(currentyear,currentMonth, + 1, i);
-
-        dateHTML += '<div class="date inactive">${nextDate.getDate()}</div>';
-
-
-    }
-    datesElement.innerHtml = datesHTML;
-
-    }   
-        prevBtn.addEventListener('click',()=> { currentDate.setMonth(currentDate.getMonth() = 1);
-
-        })
-
-        nextBtn.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth()+1);
-
-        })
-
-updateCalendar(); 
-
-
-
+  backDrop.style.display = 'block';
 }
+
+function load() {
+  const dt = new Date();
+
+  if (nav !== 0) {
+    dt.setMonth(new Date().getMonth() + nav);
+  }
+
+  const day = dt.getDate();
+  const month = dt.getMonth();
+  const year = dt.getFullYear();
+
+  const firstDayOfMonth = new Date(year, month, 1);
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  
+  const paddingDays = firstDayOfMonth.getDay(); // Directly get the day of the week (0-6)
+
+  document.getElementById('monthDisplay').innerText = 
+    `${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`;
+
+  calendar.innerHTML = ''; // Reset the calendar content
+
+  for (let i = 1; i <= paddingDays + daysInMonth; i++) {
+    const daySquare = document.createElement('div');
+    daySquare.classList.add('day');
+
+    const dayString = `${year}-${(month + 1).toString().padStart(2, '0')}-${(i - paddingDays).toString().padStart(2, '0')}`; // Format date as YYYY-MM-DD
+
+    if (i > paddingDays) {
+      daySquare.innerText = i - paddingDays;
+      const eventForDay = events.find(e => e.date === dayString);
+
+      if (i - paddingDays === day && nav === 0) {
+        daySquare.id = 'currentDay';
+      }
+
+      if (eventForDay) {
+        const eventDiv = document.createElement('div');
+        eventDiv.classList.add('event');
+        eventDiv.innerText = eventForDay.title;
+        daySquare.appendChild(eventDiv);
+      }
+
+      daySquare.addEventListener('click', () => openModal(dayString));
+    } else {
+      daySquare.classList.add('padding');
+    }
+
+    calendar.appendChild(daySquare);    
+  }
+}
+
+function closeModal() {
+  eventTitleInput.classList.remove('error');
+  newEventModal.style.display = 'none';
+  deleteEventModal.style.display = 'none';
+  backDrop.style.display = 'none';
+  eventTitleInput.value = '';
+  clicked = null;
+  load(); // Reload the calendar after closing the modal
+}
+
+function saveEvent() {
+  if (eventTitleInput.value.trim()) {
+    eventTitleInput.classList.remove('error');
+
+    const eventForDay = events.find(e => e.date === clicked);
+    if (eventForDay) {
+      eventForDay.events.push({ title: eventTitleInput.value });
+    } else {
+      events.push({
+        date: clicked,
+        events: [{ title: eventTitleInput.value }]
+      });
+    }
+
+    localStorage.setItem('events', JSON.stringify(events));
+    closeModal();
+  } else {
+    eventTitleInput.classList.add('error');
+  }
+}
+
+function deleteEvent() {
+  events = events.filter(e => e.date !== clicked);
+  localStorage.setItem('events', JSON.stringify(events));
+  closeModal();
+}
+
+function initButtons() {
+  document.getElementById('nextButton').addEventListener('click', () => {
+    nav++;
+    load();
+  });
+
+  document.getElementById('backButton').addEventListener('click', () => {
+    nav--;
+    load();
+  });
+
+  document.getElementById('saveButton').addEventListener('click', saveEvent);
+  document.getElementById('cancelButton').addEventListener('click', closeModal);
+  document.getElementById('deleteButton').addEventListener('click', deleteEvent);
+  document.getElementById('closeButton').addEventListener('click', closeModal);
+}
+
+initButtons();
+load();

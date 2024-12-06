@@ -1,41 +1,58 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
+<html lang="en">
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cincy Schedule</title>
+
     <link rel="stylesheet" href="styles.css">
-    <title>Cincy Schedule</title>
-</head>
-<body>
-    <h1>My Cincy Schedule</h1>
-    <div class="calendar">
-        <div class="header">
-            <!-- Navigation buttons with accessible labels suggested improvement -->
-            <button id="preBtn" aria-label="Previous">
-                <i class="fa-solid fa-chevron-left"></i> Previous
-            </button>
-            <div class="monthYear" id="monthYear"></div>
-            <button id="nextBtn" aria-label="Next">
-                <i class="fa-solid fa-chevron-right"></i> Next
-            </button>
+  </head>
+  <body>
+    
+    
+
+    <div id="container">
+      <div id="header">
+        <div id="monthDisplay"></div>
+        <div>
+          <button id="backButton">Back</button>
+          <button id="nextButton">Next</button>
         </div>
+      </div>
 
+      <div id="weekdays">
+        <div>Sunday</div>
+        <div>Monday</div>
+        <div>Tuesday</div>
+        <div>Wednesday</div>
+        <div>Thursday</div>
+        <div>Friday</div>
+        <div>Saturday</div>
+      </div>
 
-                  <div class="days">
-                         <div class="day">Mon</div>
-                        <div class="day">Tue</div>
-                        <div class="day">Wed</div>
-                        <div class="day">Thu</div>
-                        <div class="day">Fri</div>
-                        <div class="day">Sat</div>
-                        <div class="day">Sun</div>
-        </div>
-
-        <!-- Dates will be dynamically inserted here -->
-        <div class="dates" id="dates"></div>
+      <div id="calendar"></div>
     </div>
 
+    <div id="newEventModal">
+      <h2>New Event</h2>
 
-    <script src="main.js"></script>
-</body>
+      <input id="eventTitleInput" placeholder="Event Title" />
+
+      <button id="saveButton">Save</button>
+      <button id="cancelButton">Cancel</button>
+    </div>
+
+    <div id="deleteEventModal">
+      <h2>Event</h2>
+
+      <p id="eventText"></p>
+
+      <button id="deleteButton">Delete</button>
+      <button id="closeButton">Close</button>
+    </div>
+
+    <div id="modalBackDrop"></div>
+
+    <script src="./main.js"></script>
+  </body>
 </html>
