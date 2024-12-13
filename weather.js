@@ -1,4 +1,4 @@
-fetch("https://api.openweathermap.org/data/2.5/weather?lat=39.12&lon=-84.51&appid=8a4c8ca1b489f6bfed5f37b5c91beab9")
+fetch("https://api.openweathermap.org/data/2.5/weather?lat=39.12&lon=-84.51&appid=12345678900987654321")
     .then(res => res.json())
     .then( (data) => {
         console.log(data); 
